@@ -49,3 +49,34 @@ func (student *Student) getStudentProfile() (err error){
 
 	return
 }
+
+func (student *Student) getAllStudent() (err error, result []Student) {
+	db, err := sql.Open("mysql","root:@tcp(127.0.0.1:3306)/reksti")
+	if err != nil {
+		log.Fatalf("cannot open database")
+		return
+	}
+	defer db.Close()
+
+	var data Student
+
+	rows,err := db.Query("SELECT student_nim, student_name, student_faculty, student_major FROM student")
+	if err != nil {
+		log.Fatalf("error in querying database")
+		log.Fatal(err)
+		return
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		err = rows.Scan(&data.Nim, &data.Name, &data.Faculty, &data.Major)
+		log.Printf(data.Name)
+		result = append(result, data)
+	}
+
+	if err != nil {
+		log.Fatalf("error in scanning databaes")
+	}
+	
+	return
+}

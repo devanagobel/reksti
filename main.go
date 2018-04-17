@@ -12,6 +12,7 @@ import (
 func main(){
 	router := mux.NewRouter()
 	router.HandleFunc("/student/{id:[0-9]+}", handleStudentGetProfile).Methods("GET")
+	router.HandleFunc("/student", handleGetAllStudent).Methods("GET")
 
 	server := &http.Server{
 		Addr:         "0.0.0.0:8080",
@@ -55,6 +56,33 @@ func handleStudentGetProfile (writer http.ResponseWriter, request *http.Request 
 	} else {
 		encoder := json.NewEncoder(writer)
 		err = encoder.Encode(&student)
+		writer.Header().Set("Content-type", "application/json")
+
+		if err != nil {
+			log.Fatalf("error in encoding Student data to JSON")
+		}
+	}
+}
+
+func handleGetAllStudent (writer http.ResponseWriter, request *http.Request ) {
+	log.Printf("A")
+
+	student := Student{}
+
+	err , students := student.getAllStudent()
+	if err != nil {
+		log.Fatal(err)
+		log.Fatalf("error in encoding Student data to JSON")
+		writer.WriteHeader(500)
+		return
+	}
+
+	if students[0].Name == "" {
+		writer.WriteHeader(404)
+		return
+	} else {
+		encoder := json.NewEncoder(writer)
+		err = encoder.Encode(&students)
 		writer.Header().Set("Content-type", "application/json")
 
 		if err != nil {
