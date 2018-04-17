@@ -2,32 +2,48 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
+	"github.com/gorilla/mux"
+	"strconv"
+	"time"
 )
 
 func main(){
-	port := 8181
+	router := mux.NewRouter()
+	router.HandleFunc("/student/{id:[0-9]+}", handleStudentGetProfile).Methods("GET")
 
-	http.HandleFunc("/student/profile", func(w http.ResponseWriter, r *http.Request){
-		switch r.Method{
-		case "GET":
-			handleStudentGetAllProfile(w,r)
-		case "PUT":
-			break
-		}
-	})
-
-	log.Printf("Server starting on port %v\n",port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v",port),nil))
+	server := &http.Server{
+		Addr:         "0.0.0.0:8080",
+		Handler:      router,
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+	log.Printf("Server starting on port 8080\n")
+	err := server.ListenAndServe()
+	if err != nil {
+		log.Printf("%v",err)
+	}
 }
 
-func handleStudentGetAllProfile (writer http.ResponseWriter, _ *http.Request ) {
-	student := Student{}
+func handleStudentGetProfile (writer http.ResponseWriter, request *http.Request ) {
+	log.Printf("A")
 
-	err := student.getAllStudent()
+	vars := mux.Vars(request)
+	studentID, err := strconv.ParseInt(vars["id"], 10, 32)
+
 	if err != nil {
+		log.Fatalf("Data not found")
+		return
+	}
+
+	student := Student{
+		Id: int(studentID),
+	}
+
+	err = student.getStudentProfile()
+	if err != nil {
+		log.Fatal(err)
 		log.Fatalf("error in encoding Student data to JSON")
 		writer.WriteHeader(500)
 		return
@@ -38,7 +54,9 @@ func handleStudentGetAllProfile (writer http.ResponseWriter, _ *http.Request ) {
 		return
 	} else {
 		encoder := json.NewEncoder(writer)
-		err := encoder.Encode(&student)
+		err = encoder.Encode(&student)
+		writer.Header().Set("Content-type", "application/json")
+
 		if err != nil {
 			log.Fatalf("error in encoding Student data to JSON")
 		}

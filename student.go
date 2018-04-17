@@ -6,17 +6,24 @@ import (
 	//"errors"
 	//"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"errors"
 )
 
 type Student struct {
-	Nim string `json:"nim", sql:"student_nim"`
-	Name string `json:"name", sql:"student_name"`
-	Faculty string `json:"faculty", sql:"student_faculty"`
-	Major	string	`json:"major", sql:"student_major"`
+	Id 		int 	`json:"student_id"`
+	Nim 	string 	`json:"student_nim"`
+	Name 	string 	`json:"student_name,omitempty"`
+	Faculty string 	`json:"student_faculty,omitempty"`
+	Major	string	`json:"student_major,omitempty"`
 }
 
 
-func (student *Student) getAllStudent() (err error){
+func (student *Student) getStudentProfile() (err error){
+	if student.Id == 0 {
+		err = errors.New ("cannot get Student Data")
+		log.Fatal(err)
+	}
+
 	db, err := sql.Open("mysql","root:@tcp(127.0.0.1:3306)/reksti")
 	if err != nil {
 		log.Fatalf("cannot open database")
@@ -24,7 +31,7 @@ func (student *Student) getAllStudent() (err error){
 	}
 	defer db.Close()
 
-	rows,err := db.Query("SELECT student_nim, student_name, student_faculty, student_major FROM student")
+	rows,err := db.Query("SELECT student_nim, student_name, student_faculty, student_major FROM student WHERE student_id = ?", student.Id)
 	if err != nil {
 		log.Fatalf("error in querying database")
 		log.Fatal(err)
