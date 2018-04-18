@@ -70,13 +70,11 @@ func (student *Student) getAllStudent() (err error, result []Student) {
 
 	for rows.Next() {
 		err = rows.Scan(&data.Nim, &data.Name, &data.Faculty, &data.Major)
-		log.Printf(data.Name)
 		result = append(result, data)
 	}
 
 	if err != nil {
 		log.Fatalf("error in scanning databaes")
 	}
-	
 	return
 }

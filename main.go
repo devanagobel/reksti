@@ -65,7 +65,7 @@ func handleStudentGetProfile (writer http.ResponseWriter, request *http.Request 
 }
 
 func handleGetAllStudent (writer http.ResponseWriter, request *http.Request ) {
-	log.Printf("A")
+	writer.Header().Set("Content-type", "application/json")
 
 	student := Student{}
 
@@ -83,7 +83,6 @@ func handleGetAllStudent (writer http.ResponseWriter, request *http.Request ) {
 	} else {
 		encoder := json.NewEncoder(writer)
 		err = encoder.Encode(&students)
-		writer.Header().Set("Content-type", "application/json")
 
 		if err != nil {
 			log.Fatalf("error in encoding Student data to JSON")
