@@ -60,7 +60,7 @@ func (student *Student) getAllStudent() (err error, result []Student) {
 
 	var data Student
 
-	rows,err := db.Query("SELECT student_nim, student_name, student_faculty, student_major FROM student")
+	rows,err := db.Query("SELECT student_id, student_nim, student_name, student_faculty, student_major FROM student")
 	if err != nil {
 		log.Fatalf("error in querying database")
 		log.Fatal(err)
@@ -69,7 +69,7 @@ func (student *Student) getAllStudent() (err error, result []Student) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&data.Nim, &data.Name, &data.Faculty, &data.Major)
+		err = rows.Scan(&data.Id, &data.Nim, &data.Name, &data.Faculty, &data.Major)
 		result = append(result, data)
 	}
 

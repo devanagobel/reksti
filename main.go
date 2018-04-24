@@ -7,12 +7,14 @@ import (
 	"github.com/gorilla/mux"
 	"strconv"
 	"time"
+
 )
 
 func main(){
 	router := mux.NewRouter()
 	router.HandleFunc("/student/{id:[0-9]+}", handleStudentGetProfile).Methods("GET")
 	router.HandleFunc("/student", handleGetAllStudent).Methods("GET")
+	router.HandleFunc("/course/{id:[0-9]+}", handleCourseGetName).Methods("GET")
 
 	server := &http.Server{
 		Addr:         "0.0.0.0:8080",
@@ -28,7 +30,7 @@ func main(){
 }
 
 func handleStudentGetProfile (writer http.ResponseWriter, request *http.Request ) {
-	log.Printf("A")
+	writer.Header().Set("Content-type", "application/json")
 
 	vars := mux.Vars(request)
 	studentID, err := strconv.ParseInt(vars["id"], 10, 32)
@@ -56,7 +58,6 @@ func handleStudentGetProfile (writer http.ResponseWriter, request *http.Request 
 	} else {
 		encoder := json.NewEncoder(writer)
 		err = encoder.Encode(&student)
-		writer.Header().Set("Content-type", "application/json")
 
 		if err != nil {
 			log.Fatalf("error in encoding Student data to JSON")
@@ -64,6 +65,42 @@ func handleStudentGetProfile (writer http.ResponseWriter, request *http.Request 
 	}
 }
 
+func handleCourseGetName (writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Set("Content-type", "application/json")
+
+	vars := mux.Vars(request)
+	courseID, err := strconv.ParseInt(vars["id"], 10, 32)
+
+	if err != nil {
+		log.Fatalf("Data not found")
+		return
+	}
+
+	course := Course{
+		Id: int(courseID),
+		Index: "XXXXX",
+	}
+
+	err = course.getCourseName()
+	if err != nil {
+		log.Fatal(err)
+		log.Fatalf("error in encoding Course data to JSON")
+		writer.WriteHeader(500)
+		return
+	}
+
+	if course.Index == "" || course.Name == "" {
+		writer.WriteHeader(404)
+		return
+	} else {
+		encoder := json.NewEncoder(writer)
+		err = encoder.Encode(&course)
+
+		if err != nil {
+			log.Fatalf("error in encoding Student data to JSON")
+		}
+	}
+}
 func handleGetAllStudent (writer http.ResponseWriter, request *http.Request ) {
 	writer.Header().Set("Content-type", "application/json")
 
