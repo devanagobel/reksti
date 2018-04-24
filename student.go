@@ -3,14 +3,11 @@ package main
 import (
 	"database/sql"
 	"log"
-	//"errors"
-	//"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"errors"
 )
 
 type Student struct {
-	Id 		int 	`json:"student_id"`
 	Nim 	string 	`json:"student_nim"`
 	Name 	string 	`json:"student_name,omitempty"`
 	Faculty string 	`json:"student_faculty,omitempty"`
@@ -19,7 +16,9 @@ type Student struct {
 
 
 func (student *Student) getStudentProfile() (err error){
-	if student.Id == 0 {
+
+	query := "SELECT student_nim, student_name, student_faculty, student_major FROM student WHERE student_nim =" + "'" + student.Nim + "'"
+	if student.Nim == "" {
 		err = errors.New ("cannot get Student Data")
 		log.Fatal(err)
 	}
@@ -31,7 +30,7 @@ func (student *Student) getStudentProfile() (err error){
 	}
 	defer db.Close()
 
-	rows,err := db.Query("SELECT student_nim, student_name, student_faculty, student_major FROM student WHERE student_id = ?", student.Id)
+	rows,err := db.Query(query)
 	if err != nil {
 		log.Fatalf("error in querying database")
 		log.Fatal(err)
@@ -40,6 +39,7 @@ func (student *Student) getStudentProfile() (err error){
 	defer rows.Close()
 
 	if rows.Next() {
+		log.Print(student.Nim)
 		err = rows.Scan(&student.Nim, &student.Name, &student.Faculty, &student.Major)
 	}
 
@@ -60,7 +60,7 @@ func (student *Student) getAllStudent() (err error, result []Student) {
 
 	var data Student
 
-	rows,err := db.Query("SELECT student_id, student_nim, student_name, student_faculty, student_major FROM student")
+	rows,err := db.Query("SELECT student_nim, student_name, student_faculty, student_major FROM student")
 	if err != nil {
 		log.Fatalf("error in querying database")
 		log.Fatal(err)
@@ -69,7 +69,7 @@ func (student *Student) getAllStudent() (err error, result []Student) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&data.Id, &data.Nim, &data.Name, &data.Faculty, &data.Major)
+		err = rows.Scan(&data.Nim, &data.Name, &data.Faculty, &data.Major)
 		result = append(result, data)
 	}
 

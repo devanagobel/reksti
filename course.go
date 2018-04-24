@@ -8,14 +8,15 @@ import (
 )
 
 type Course struct {
-	Id		int	`json:"course_id"`
 	Index 	string 	`json:"course_index"`
 	Name	string	`json:"course_name"`
 }
 
 func (course *Course) getCourseName() (err error) {
 
-	if course.Id == 0 {
+	query := "SELECT course_index, course_name FROM course WHERE course_index = " + "'" + course.Index + "'"
+
+	if course.Index == "" {
 		err = errors.New("cannot get Course Data")
 		log.Fatal(err)
 	}
@@ -27,7 +28,7 @@ func (course *Course) getCourseName() (err error) {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT course_index, course_name FROM course WHERE course_id = ?", course.Id)
+	rows, err := db.Query(query)
 	if err != nil {
 		log.Fatalf("error in querying database")
 		log.Fatal(err)
@@ -46,4 +47,33 @@ func (course *Course) getCourseName() (err error) {
 
 	return
 
+}
+
+func (course *Course) getAllCourse() (err error, result []Course) {
+	db, err := sql.Open("mysql","root:@tcp(127.0.0.1:3306)/reksti")
+	if err != nil {
+		log.Fatalf("cannot open database")
+		return
+	}
+	defer db.Close()
+
+	var data Course
+
+	rows, err := db.Query("SELECT course_index, course_name FROM course ")
+	if err != nil {
+		log.Fatalf("error in querying database")
+		log.Fatal(err)
+		return
+	}
+	defer rows.Close()
+
+	for rows.Next(){
+		err = rows.Scan(&data.Index, &data.Name)
+		result = append(result,data)
+	}
+
+	if err != nil {
+		log.Fatalf("error in scanning database")
+	}
+	return
 }
