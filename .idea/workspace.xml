@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="371d9b87-86c0-424f-965e-432512395c55" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/course.go" afterPath="$PROJECT_DIR$/course.go" />
       <change beforePath="$PROJECT_DIR$/main.go" afterPath="$PROJECT_DIR$/main.go" />
-      <change beforePath="$PROJECT_DIR$/student.go" afterPath="$PROJECT_DIR$/student.go" />
+      <change beforePath="$PROJECT_DIR$/reksti.exe" afterPath="$PROJECT_DIR$/reksti.exe" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,48 +13,83 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.go" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/main.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1321">
-              <caret line="39" column="4" lean-forward="false" selection-start-line="39" selection-start-column="4" selection-end-line="39" selection-end-column="4" />
-              <folding>
-                <element signature="e#14#108#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="student.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/student.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="464">
-              <caret line="41" column="29" lean-forward="false" selection-start-line="41" selection-start-column="29" selection-end-line="41" selection-end-column="29" />
-              <folding>
-                <element signature="e#14#93#0" expanded="true" />
-                <marker date="1524572677082" expanded="true" signature="1344:1421" ph="SELECT stude... student" />
-                <marker date="1524572677082" expanded="true" signature="1344:1423" ph="SELECT stude... student" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="course.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/course.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="78" column="1" lean-forward="false" selection-start-line="78" selection-start-column="1" selection-end-line="78" selection-end-column="1" />
-              <folding>
-                <element signature="e#14#93#0" expanded="true" />
-                <marker date="1524573679141" expanded="true" signature="621:622" ph="SELECT cours... course" />
-                <marker date="1524573679141" expanded="true" signature="1155:1199" ph="SELECT cours... course" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.71644163">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="main.go" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/main.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="447">
+                  <caret line="119" column="35" lean-forward="false" selection-start-line="119" selection-start-column="35" selection-end-line="119" selection-end-column="35" />
+                  <folding>
+                    <element signature="e#14#108#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="student.go" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/student.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="464">
+                  <caret line="41" column="29" lean-forward="false" selection-start-line="41" selection-start-column="29" selection-end-line="41" selection-end-column="29" />
+                  <folding>
+                    <element signature="e#14#93#0" expanded="true" />
+                    <marker date="1524572677082" expanded="true" signature="1344:1421" ph="SELECT stude... student" />
+                    <marker date="1524572677082" expanded="true" signature="1344:1423" ph="SELECT stude... student" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="course.go" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/course.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1326">
+                  <caret line="78" column="1" lean-forward="false" selection-start-line="78" selection-start-column="1" selection-end-line="78" selection-end-column="1" />
+                  <folding>
+                    <element signature="e#14#93#0" expanded="true" />
+                    <marker date="1524573679141" expanded="true" signature="621:622" ph="SELECT cours... course" />
+                    <marker date="1524573679141" expanded="true" signature="1155:1199" ph="SELECT cours... course" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="class.go" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/class.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="345">
+                  <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+                  <folding>
+                    <element signature="e#14#93#0" expanded="true" />
+                    <marker date="1524576105870" expanded="true" signature="286:361" ph="SELECT class... course" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="course.go" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/course.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-162">
+                  <caret line="23" column="67" lean-forward="false" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="67" />
+                  <folding>
+                    <element signature="e#14#93#0" expanded="true" />
+                    <marker date="1524573679141" expanded="true" signature="621:622" ph="SELECT cours... course" />
+                    <marker date="1524573679141" expanded="true" signature="1155:1199" ph="SELECT cours... course" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -77,6 +111,7 @@
         <option value="$PROJECT_DIR$/student.go" />
         <option value="$PROJECT_DIR$/course.go" />
         <option value="$PROJECT_DIR$/main.go" />
+        <option value="$PROJECT_DIR$/class.go" />
       </list>
     </option>
   </component>
@@ -226,7 +261,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/course.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
+        <state relative-caret-position="1326">
           <caret line="78" column="1" lean-forward="false" selection-start-line="78" selection-start-column="1" selection-end-line="78" selection-end-column="1" />
           <folding>
             <element signature="e#14#93#0" expanded="true" />
@@ -238,10 +273,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1321">
-          <caret line="39" column="4" lean-forward="false" selection-start-line="39" selection-start-column="4" selection-end-line="39" selection-end-column="4" />
+        <state relative-caret-position="447">
+          <caret line="119" column="35" lean-forward="false" selection-start-line="119" selection-start-column="35" selection-end-line="119" selection-end-column="35" />
           <folding>
             <element signature="e#14#108#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/class.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+          <folding>
+            <element signature="e#14#93#0" expanded="true" />
+            <marker date="1524576105870" expanded="true" signature="286:361" ph="SELECT class... course" />
           </folding>
         </state>
       </provider>
