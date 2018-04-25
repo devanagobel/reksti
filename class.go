@@ -13,6 +13,7 @@ type Class struct {
 	Course	string	`json:"course_index"`
 }
 
+
 func (class *Class) getClassName() (err error) {
 
 	query := "SELECT class_index, class_name, course_index FROM class WHERE class_index = " + "'" + class.Index + "'"
@@ -113,5 +114,36 @@ func (class *Class) getClassForCourse() (err error, result []Class) {
 
 	return
 
+}
+
+func (class *Class) getCourseFromClass() (err error, result Course){
+	query := "SELECT class.course_index, course.course_name from course INNER JOIN class ON course.course_index = class.course_index WHERE class.class_index =" + "'" + class.Index + "'"
+
+	db, err := sql.Open("mysql","root:@tcp(127.0.0.1:3306)/reksti" )
+	if err != nil {
+		log.Fatal(err)
+		log.Fatalf("Cannot open database")
+		return
+	}
+	defer db.Close()
+
+	rows, err := db.Query(query)
+	if err != nil {
+		log.Fatal(err)
+		log.Fatalf("error in querying database")
+		return
+	}
+	defer rows.Close()
+
+	for rows.Next(){
+		err = rows.Scan(&result.Index, &result.Name,)
+	}
+
+	if err != nil {
+		log.Fatal(err)
+		log.Fatalf("error in scanning database")
+	}
+
+	return
 }
 
