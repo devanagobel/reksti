@@ -9,10 +9,10 @@
     session_start();
     if(isset($_SESSION['userType']) == 'dosen') {
         //Nanti ini ganti redirect ke halaman php khusus dosen
-        Redirect('data-analytics/dataAnalyticsStudent.php', false);
+        Redirect('DataAnalytics/dataAnalyticsStudent.php', false);
     }elseif(isset($_SESSION['userType']) == 'siswa'){
         //Nanti ini redirect ke halaman php khusus siswa
-        Redirect('data-analytics/dataAnalyticsTeacher.php', false);
+        Redirect('DataAnalytics/dataAnalyticsTeacher.php', false);
     }else{
         Redirect('index.html', false);
     }
