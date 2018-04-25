@@ -7,7 +7,7 @@ $(function(){
         };
 
         $.ajax({
-            url: '/attendance',
+            url: '/API/attendance',
             type: 'POST',
             cache: false,
             data: JSON.stringify(data),
