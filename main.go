@@ -17,6 +17,8 @@ func main(){
 	router.HandleFunc("/course/{id}", handleCourseGetName).Methods("GET")
 	router.HandleFunc("/course", handleGetAllCourse).Methods("GET")
 	router.HandleFunc("/class/{id}", handleGetClassName).Methods("GET")
+	router.HandleFunc("/class/course/{id}",handleGetClassByCourse).Methods("GET")
+	router.HandleFunc("/class", handleGetAllClass).Methods("GET")
 
 	server := &http.Server{
 		Addr:         "0.0.0.0:8080",
@@ -174,6 +176,64 @@ func handleGetAllCourse (writer http.ResponseWriter, request *http.Request ) {
 		if err != nil {
 			log.Fatal(err)
 			log.Fatalf("error in encoding Course data to JSON")
+		}
+	}
+}
+
+func handleGetAllClass (writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Set("Content-type", "application/json")
+
+	class := Class{}
+
+	err, classes := class.getAllClasses()
+	if err != nil {
+		log.Fatal(err)
+		log.Fatalf("error in encoding Class data to JSON")
+		writer.WriteHeader(500)
+		return
+	}
+
+	if classes[0].Index == "" || classes[0].Name == "" {
+		writer.WriteHeader(400)
+		return
+	} else {
+		encoder := json.NewEncoder(writer)
+		err := encoder.Encode(&classes)
+
+		if err != nil {
+			log.Fatal(err)
+			log.Fatalf("error in encoding Class data to JSON")
+		}
+	}
+}
+
+func handleGetClassByCourse (writer http.ResponseWriter, request *http.Request){
+	writer.Header().Set("Content-type", "application/json")
+
+	vars := mux.Vars(request)
+	courseIndex := vars["id"]
+
+	class := Class{
+		Course: courseIndex,
+	}
+
+	err, classes := class.getClassForCourse()
+	if err != nil {
+		log.Fatal(err)
+		log.Fatalf("error in encoding Course data to JSON")
+		writer.WriteHeader(500)
+		return
+	}
+
+	if classes[0].Index == "" || classes[0].Name == "" {
+		writer.WriteHeader(404)
+		return
+	} else {
+		encoder := json.NewEncoder(writer)
+		err = encoder.Encode(&classes)
+
+		if err != nil {
+			log.Fatalf("error in encoding Student data to JSON")
 		}
 	}
 }

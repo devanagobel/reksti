@@ -48,3 +48,70 @@ func (class *Class) getClassName() (err error) {
 	return
 }
 
+func (class *Class) getAllClasses() (err error, result []Class) {
+	db, err := sql.Open("mysql","root:@tcp(127.0.0.1:3306)/reksti" )
+	if err != nil {
+		log.Fatal(err)
+		log.Fatalf("Cannot open database")
+		return
+	}
+	defer db.Close()
+
+	var data Class
+
+	rows, err := db.Query("SELECT class_index, class_name, course_index FROM class ")
+	if err != nil {
+		log.Fatal(err)
+		log.Fatalf("error in querying database")
+		return
+	}
+	defer rows.Close()
+
+	for rows.Next(){
+		err = rows.Scan(&data.Index, &data.Name, &data.Course)
+		result = append(result,data)
+	}
+
+	if err != nil {
+		log.Fatal(err)
+		log.Fatalf("error in scanning database")
+	}
+
+	return
+}
+
+func (class *Class) getClassForCourse() (err error, result []Class) {
+	query := "SELECT class_index, class_name, course_index FROM class WHERE course_index = " + "'" + class.Course + "'"
+
+	db, err := sql.Open("mysql","root:@tcp(127.0.0.1:3306)/reksti" )
+	if err != nil {
+		log.Fatal(err)
+		log.Fatalf("Cannot open database")
+		return
+	}
+	defer db.Close()
+
+	var data Class
+
+	rows, err := db.Query(query)
+	if err != nil {
+		log.Fatal(err)
+		log.Fatalf("error in querying database")
+		return
+	}
+	defer rows.Close()
+
+	for rows.Next(){
+		err = rows.Scan(&data.Index, &data.Name, &data.Course)
+		result = append(result,data)
+	}
+
+	if err != nil {
+		log.Fatal(err)
+		log.Fatalf("error in scanning database")
+	}
+
+	return
+
+}
+
