@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course</title>
+
+    <script>
+        function search(event){
+            event.preventDefault();
+            var xhr = new XMLHttpRequest();
+
+            xhr.open("GET","/API/course");
+
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == XMLHttpRequest.DONE){
+                    document.getElementById("update").innerHTML = xhr.responseText;
+                }
+            }
+            xhr.send(null);
+        }
+
+    </script>
+</head>
+<h1>COURSE</h1>
+<button onClick = search(event)>Get All Course</button>
+<button onclick=location.href="/get-attendance">Your Attendance Data</button>
+<br>
+<span id="update"> </span>
+</body>
+</html>

@@ -7,6 +7,10 @@ import (
 	"github.com/gorilla/mux"
 	"time"
 
+	//"io/ioutil"
+	//"lfm-api/login"
+	//"strings"
+	//"reksti/config"
 )
 
 func main(){
@@ -15,6 +19,19 @@ func main(){
 	router.HandleFunc("/attendance", func (writer http.ResponseWriter, request *http.Request) {
 		http.ServeFile(writer,request, "public/attendance.html")
 	})
+	router.HandleFunc("/get-attendance", func (writer http.ResponseWriter, request *http.Request) {
+		http.ServeFile(writer,request, "get-attendance.html")
+	})
+	router.HandleFunc("/course", func(writer http.ResponseWriter, request *http.Request){
+		http.ServeFile(writer,request, "course.html")
+	})
+
+	router.HandleFunc("/login/student", func(writer http.ResponseWriter, request *http.Request){
+		http.ServeFile(writer, request, "public/login-student.html")
+	})
+
+	//router.HandleFunc("/API/login/student", handleStudentLogin).Methods("POST")
+	//router.HandleFunc("/API/login/teacher", handleTeacherLogin).Methods("POST")
 	router.HandleFunc("/API/student/{id}", handleStudentGetProfile).Methods("GET")
 	router.HandleFunc("/API/student", handleGetAllStudent).Methods("GET")
 
@@ -28,8 +45,11 @@ func main(){
 
 	router.HandleFunc("/API/attendance/course/{id}", handleGetAttendanceByCourse).Methods("GET")
 	router.HandleFunc("/API/attendance/student/{id}", handleGetAttendanceByStudent).Methods("GET")
+	router.HandleFunc("/API/attendance/count/student/{id}", handleGetCountAttendanceByStudent).Methods("GET")
 	router.HandleFunc("/API/attendance", handleGetAllAttendance).Methods("GET")
 	router.HandleFunc("/API/attendance", handleAttendancePOST).Methods("POST")
+
+
 
 	server := &http.Server{
 		Addr:         "0.0.0.0:8080",
@@ -201,6 +221,38 @@ func handleGetAttendanceByStudent (writer http.ResponseWriter, request *http.Req
 	}
 }
 
+func handleGetCountAttendanceByStudent (writer http.ResponseWriter, request *http.Request){
+	writer.Header().Set("Content-type", "application/json")
+
+	vars := mux.Vars(request)
+	attendanceStudent := vars["id"]
+
+	attendance := Attendance{
+		Student: attendanceStudent,
+	}
+
+	err, attendances := attendance.getAttendanceByNIM()
+	if err != nil {
+		log.Fatal(err)
+		log.Fatalf("error in encoding Attendance data to JSON")
+		writer.WriteHeader(500)
+		return
+	}
+
+	count := len(attendances)
+	if attendances[0].Course == "" || attendances[0].Class == "" {
+		writer.WriteHeader(404)
+		return
+	} else {
+		encoder := json.NewEncoder(writer)
+		err = encoder.Encode(&count)
+
+		if err != nil {
+			log.Fatalf("error in encoding Attendance data to JSON")
+		}
+	}
+}
+
 func handleGetAttendanceByCourse (writer http.ResponseWriter, request *http.Request){
 	writer.Header().Set("Content-type", "application/json")
 
@@ -298,12 +350,14 @@ func handleGetAllClass (writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	count := len(classes)
+
 	if classes[0].Index == "" || classes[0].Name == "" {
 		writer.WriteHeader(400)
 		return
 	} else {
 		encoder := json.NewEncoder(writer)
-		err := encoder.Encode(&classes)
+		err := encoder.Encode(&count)
 
 		if err != nil {
 			log.Fatal(err)
@@ -374,57 +428,111 @@ func handleAttendancePOST (writer http.ResponseWriter, request *http.Request) {
 	attendance := Attendance{}
 
 	err := json.NewDecoder(request.Body).Decode(&attendance)
+
+	print(request.Body)
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	attendance.insertAttendanceData()
-
 	userAttendance, err := json.Marshal(attendance)
+
+	log.Printf(attendance.Course)
+	log.Printf(attendance.Class)
+	log.Printf(attendance.Student)
+
+	attendance.insertAttendanceData()
 	if err != nil {
 		log.Fatal(err)
 	}
 	writer.Header().Set("Content-type", "application/json")
 	writer.WriteHeader(http.StatusOK)
 	writer.Write(userAttendance)
-	//
-	//if request.Body != nil {
-	//	defer request.Body.Close()
-	//}
-	//
-	//
-	//decoder := json.NewDecoder(request.Body)
-	//
-	//attendance := Attendance{}
-	//
-	//err := decoder.Decode(attendance)
-	//if err != nil {
-	//	log.Fatal(err)
-	//	log.Fatalf("Cannot decode attendance data")
-	//	writer.WriteHeader(500)
-	//	return
-	//}
-	//
-	//data, err := json.Marshal(attendance)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//writer.Write(data)
-	//
-	//err = attendance.insertAttendanceData()
-	//
-	//if err != nil {
-	//	writer.WriteHeader(500)
-	//	return
-	//}
-	//
-	//attendanceReturn := Attendance {
-	//	Course: attendance.Course,
-	//	Class: attendance.Class,
-	//	Student: attendance.Student,
-	//}
-	//
-	//encoder := json.NewEncoder(writer)
-	//encoder.Encode(attendanceReturn)
 
 }
+
+//func handleStudentLogin (writer http.ResponseWriter, request *http.Request) {
+//	body, err := ioutil.ReadAll(request.Body)
+//	if err != nil {
+//		writer.WriteHeader(500)
+//		log.Fatal(err)
+//		log.Fatalf("cannot read request")
+//		return
+//	}
+//
+//	loginStudent := login.Login{}
+//
+//	err = json.Unmarshal(body, &loginStudent)
+//	if err != nil {
+//		log.Fatal(err)
+//		log.Fatal("unable to marshal")
+//		writer.WriteHeader(500)
+//		return
+//	}
+//
+//	if !strings.EqualFold(loginStudent.Password, config.APIConfig.LoginStudentPassword) || !strings.EqualFold(loginStudent.Username, config.APIConfig.LoginStudentUsername) {
+//		writer.WriteHeader(403)
+//		return
+//	}
+//
+//	cookieName := http.Cookie{
+//		Name: "username",
+//		Value:    config.APIConfig.LoginStudentUsername,
+//		Expires:  time.Now().Add(24 * time.Hour),
+//		HttpOnly: true,
+//		Path:     "/",
+//	}
+//	cookiePass := http.Cookie{
+//		Name:     "password",
+//		Value:    config.APIConfig.LoginStudentPassword,
+//		Expires:  time.Now().Add(24 * time.Hour),
+//		HttpOnly: true,
+//		Path:     "/",
+//	}
+//	http.SetCookie(writer, &cookieName)
+//	http.SetCookie(writer, &cookiePass)
+//
+//}
+//
+//func handleTeacherLogin (writer http.ResponseWriter, request *http.Request) {
+//	body, err := ioutil.ReadAll(request.Body)
+//	if err != nil {
+//		writer.WriteHeader(500)
+//		log.Fatal(err)
+//		log.Fatalf("cannot read request")
+//		return
+//	}
+//
+//	loginTeacher := login.Login{}
+//
+//	err = json.Unmarshal(body, &loginTeacher)
+//	if err != nil {
+//		log.Fatal(err)
+//		log.Fatal("unable to marshal")
+//		writer.WriteHeader(500)
+//		return
+//	}
+//
+//	if !strings.EqualFold(loginTeacher.Password, config.APIConfig.LoginTeacherPassword) || !strings.EqualFold(loginTeacher.Username, config.APIConfig.LoginTeacherUsername) {
+//		writer.WriteHeader(403)
+//		return
+//	}
+//
+//	cookieName := http.Cookie{
+//		Name: "username",
+//		Value:    config.APIConfig.LoginTeacherUsername,
+//		Expires:  time.Now().Add(24 * time.Hour),
+//		HttpOnly: true,
+//		Path:     "/",
+//	}
+//	cookiePass := http.Cookie{
+//		Name:     "password",
+//		Value:    config.APIConfig.LoginTeacherPassword,
+//		Expires:  time.Now().Add(24 * time.Hour),
+//		HttpOnly: true,
+//		Path:     "/",
+//	}
+//	http.SetCookie(writer, &cookieName)
+//	http.SetCookie(writer, &cookiePass)
+//
+//}

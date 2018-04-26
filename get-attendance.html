@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Data</title>
+
+    <script>
+        function search(event){
+            event.preventDefault();
+            var xhr = new XMLHttpRequest();
+            var a = document.getElementById("student_nim").value;
+            var text = "API/attendance/student/" + a;
+            xhr.open("GET",text);
+            xhr.setRequestHeader("Content-type", "application/json");
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState ==XMLHttpRequest.DONE){
+                    document.getElementById("update2").innerHTML = xhr.responseText;
+                }
+            }
+            xhr.send(null);
+        }
+    </script>
+
+</head>
+
+<body>
+<h1>ATTENDANCE</h1>
+<br>
+<input type="text" id="student_nim" name="student_nim" placeholder="NIM Mahasiswa" required="required">
+<button onclick=search(event)>Get Attendance Data</button>
+<br>
+<span id="update2"> </span>
+
+</body>
+</html>

@@ -1,3 +1,5 @@
+
+
 $(function(){
     $('.button-confirm').click(function(){
         var data = {
@@ -18,7 +20,6 @@ $(function(){
                     (response.student_nim == "undefined")){
                     alert("cannot put data")
                 } else {
-                    alert("succeed");
                     alert(response);
                 }
             }

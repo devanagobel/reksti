@@ -3,11 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Attendance</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css" />
-    <script src="/js/jquery-3.2.1.min.js"></script>
-    <script src="/js/attendance.js"></script>
+    <script>
+        function post(event){
+            event.preventDefault();
+            var xhr = new XMLHttpRequest();
+            var a = document.getElementById("course-index").value;
+            var b = document.getElementById("class-index").value;
+            var c = document.getElementById("student-nim").value;
 
+            var data = {
+                course_index : a,
+                class_index : b,
+                student_nim: c,
+            };
 
+            var json = JSON.stringify(data);
+
+            xhr.open("POST","/API/attendance")
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == XMLHttpRequest.DONE){
+                    // document.getElementById("cr").innerHTML = xhr.responseText;
+                    // alert(json);
+                }
+            }
+            xhr.send(json);
+        }
+    </script>
 </head>
 <body>
     <div class="row">
@@ -15,8 +37,7 @@
             <input type="text" id="course-index" name="course-index" placeholder="EL4233" required="required" />
             <input type="text" id="class-index" name="class-index" placeholder="EL4233" required="required" />
             <input type="text" id="student-nim" name="student-nim" placeholder="EL4233" required="required" />
-            <button id="button-confirm" class="button-confirm">confirm</button>
-
+            <button onclick=post(event)>confirm</button>
         </div>
     </div>
 </body>

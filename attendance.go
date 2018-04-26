@@ -10,7 +10,7 @@ import (
 
 type Attendance struct {
 	Course 	string	`json:"course_index"`
-	Class	string	`json:"class_name"`
+	Class	string	`json:"class_index"`
 	Student	string	`json:"student_nim"`
 }
 
